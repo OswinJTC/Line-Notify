@@ -1,5 +1,6 @@
 package com.example.line_notify;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +18,18 @@ public class LineNotifyService {
     @Value("${line.notify.token}")
     private String lineNotifyToken;
 
+    @Autowired
+    private StockPriceService stockPriceService;
+
     private static final String LINE_NOTIFY_API = "https://notify-api.line.me/api/notify";
+
+
+    @Scheduled(fixedRate = 10000)  // Sends notification every 10 seconds
+    public void sendStockPriceNotification() {
+        String[] symbols = {"NVDA", "TSLA", "GOOG"};
+        String stockPrices = stockPriceService.getStockPrices(symbols);
+        sendNotification("Current Stock Prices:\n" + stockPrices);
+    }
 
     public void sendNotification(String message) {
         RestTemplate restTemplate = new RestTemplate();
@@ -38,10 +50,5 @@ public class LineNotifyService {
         );
 
         System.out.println("Response: " + responseEntity.getBody());
-    }
-
-    @Scheduled(fixedRate = 60000)  // Sends notification every 1 minute
-    public void sendScheduledNotification() {
-        sendNotification("晚上好！陳睿泰");
     }
 }
