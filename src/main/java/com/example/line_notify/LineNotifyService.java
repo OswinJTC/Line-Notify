@@ -1,6 +1,5 @@
 package com.example.line_notify;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,24 +10,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 @Service
 public class LineNotifyService {
 
     @Value("${line.notify.token}")
     private String lineNotifyToken;
-
-    @Autowired
-    private StockPriceService stockPriceService;
-
     private static final String LINE_NOTIFY_API = "https://notify-api.line.me/api/notify";
 
 
-    @Scheduled(fixedRate = 10000)  // Sends notification every 10 seconds
+    @Scheduled(fixedRate = 30000)  // Sends notification every 10 seconds
     public void sendStockPriceNotification() {
-        String[] symbols = {"NVDA", "TSLA", "GOOG"};
-        String stockPrices = stockPriceService.getStockPrices(symbols);
-        sendNotification("Current Stock Prices:\n" + stockPrices);
+        Random random_generator  = new Random();
+        int number = random_generator.nextInt(10)+1;
+        System.out.println(number);
+
+        if((number % 2) == 0){
+            sendNotification("嗨，陳睿泰會成功～");
+        }
+
     }
 
     public void sendNotification(String message) {
