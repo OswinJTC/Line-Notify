@@ -1,0 +1,14 @@
+steps:
+  - name: 'maven:3.8.6-eclipse-temurin-17'
+    args: ['mvn', 'clean', 'install']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-east1-docker.pkg.dev/buoyant-imagery-424204-k9/oswin-projects/oswin-line-notify-test-img', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-east1-docker.pkg.dev/buoyant-imagery-424204-k9/oswin-projects/oswin-line-notify-test-img']
+
+images:
+  - 'asia-east1-docker.pkg.dev/buoyant-imagery-424204-k9/oswin-projects/oswin-line-notify-test-img'
+
+

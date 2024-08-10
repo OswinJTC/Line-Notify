@@ -19,16 +19,26 @@ public class LineNotifyService {
     private String lineNotifyToken;
     private static final String LINE_NOTIFY_API = "https://notify-api.line.me/api/notify";
 
+    int count = 1;
+    int answer = 672;
+    String temp_sentence = "";
 
-    @Scheduled(fixedRate = 30000)  // Sends notification every 10 seconds
+
+    @Scheduled(fixedRate = 10000)  // Sends notification every 10 seconds
     public void sendStockPriceNotification() {
         Random random_generator  = new Random();
-        int number = random_generator.nextInt(10)+1;
-        System.out.println(number);
+        int number = random_generator.nextInt(1000)+1;
 
-        if((number % 2) == 0){
-            sendNotification("嗨，陳睿泰會成功～");
+        if(number == answer){
+            temp_sentence = "陳睿泰大帥哥，這是目前第" + count + "次嘗試。你抽到的的號碼是 " + number + " 啦！！！恭喜中獎，你太帥了嗚嗚嗚～\uD83D\uDC4D\uD83D\uDC4D\uD83D\uDC4D";
+        }else{
+            temp_sentence = "陳睿泰帥哥，這是目前第" + count + "次嘗試。你抽到的的號碼是 " + number + "...";
         }
+
+        System.out.println(temp_sentence);
+        sendNotification(temp_sentence);
+
+        count ++;
 
     }
 
